@@ -1,0 +1,6 @@
+#python compile
+*.pyc
+
+#matlab in use
+*.m~
+
