@@ -47,8 +47,8 @@ class mrMeshPyQtTCPServer(QtNetwork.QTcpServer):
         
         # for testing
         if debug: 
-            print 'incomingData'
-            print incomingData
+            print('incomingData')
+            print(incomingData)
 
         # lets start unpacking the incoming data packet
         # we expect anything coming in to first have a command (cmd)
@@ -56,12 +56,12 @@ class mrMeshPyQtTCPServer(QtNetwork.QTcpServer):
 
         if incomingData[0] != 'cmd':
             #something has gone wrong - stop here
-            print 'error! - command string received but not recognised:'
+            print('error! - command string received but not recognised:')
 
         else:
             # we got a command
-            print 'Full incoming command is:'
-            print incomingData
+            print('Full incoming command is:')
+            print(incomingData)
             
             # fields 2,3,and 4 (index 1,2,3) in the command string are placeholders -- ignore for now #TODO
 

@@ -25,7 +25,7 @@ def Ui_setupMenuBarCallbacks(parent_UI):
 
     the_parent_UI = parent_UI;
 
-    if debug: print 'setting up menu bar callbacks'
+    if debug: print('setting up menu bar callbacks')
 
     parent_UI.actionEnableDraw.triggered.connect(cb_MenuEnableDraw)
     parent_UI.actionDisableDraw.triggered.connect(cb_MenuDisableDraw)
@@ -35,7 +35,7 @@ def Ui_setupMenuBarCallbacks(parent_UI):
 
 
 def testMenuMessage():
-    print 'test message from mrMeshPy menu! - wait for it!'
+    print('test message from mrMeshPy menu! - wait for it!')
     global the_parent_UI
 
 

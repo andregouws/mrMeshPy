@@ -21,7 +21,7 @@ def mrMeshVTKWindow(parentUI, data):
     _translate = QtCore.QCoreApplication.translate
     
     #create a new vtkWidget, appending to the list of exisitng widgets
-    if debug: print parentUI
+    if debug: print(parentUI)
     newVTKWidgetInstance = QVTKRenderWindowInteractor(parentUI.centralwidget)
     parentUI.vtkInstances.append(newVTKWidgetInstance)
 
@@ -63,7 +63,7 @@ def mrMeshVTKWindow(parentUI, data):
         loadTestVTKWindow(parentUI)
     else:
         initializeEmptyVTKWindowInstance(parentUI)
-    print 'Finished setting up new VTK window instance ...'
+    print('Finished setting up new VTK window instance ...')
 
     
 

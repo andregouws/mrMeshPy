@@ -23,7 +23,7 @@ def sendROIInfo(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
         data_to_send = targetVTKWindow._Iren.filledROIPoints
 
         num2send = len(data_to_send)
-        if debug: print num2send
+        if debug: print(num2send)
 
         the_TCPserver.socket.write(str('RoiReady,double,%i,' %num2send))
         return 0
@@ -42,8 +42,8 @@ def sendROIVertices(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
 
     formatData = array(data_to_send,'d')
     formatString = formatData.tostring()
-    if debug: print formatString
-    if debug: print len(formatString)
+    if debug: print(formatString)
+    if debug: print(len(formatString))
     the_TCPserver.socket.write(formatString)
 
 

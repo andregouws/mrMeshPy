@@ -31,7 +31,7 @@ def drawingPickPoint(obj, ev):
 
         #get the pick position
         obj.GetPicker().Pick(obj.GetEventPosition()[0], obj.GetEventPosition()[1], 0,  obj.GetRenderWindow().GetRenderers().GetFirstRenderer())
-        if debug: print obj.GetPicker().GetPointId()
+        if debug: print(obj.GetPicker().GetPointId())
         currPickPointID = obj.GetPicker().GetPointId()
         obj.pickedPointIds.append(currPickPointID) # append to place holder for picked vtk point IDs so we can track   
 
@@ -40,16 +40,16 @@ def drawingPickPoint(obj, ev):
         # get the required surface
         try:
             currPolyData = obj.GetPicker().GetActor().GetMapper().GetInput()
-            if debug: print currPolyData.GetPointData().GetScalars().GetValue(currPickPointID)
+            if debug: print(currPolyData.GetPointData().GetScalars().GetValue(currPickPointID))
             
             # append orig value to place holder for picked vtk point scalar values so we can revert
             obj.pickedPointOrigValues.append(currPolyData.GetPointData().GetScalars().GetTuple(currPickPointID))
 
-            if debug: print currPolyData.GetPointData().GetScalars().GetTuple(currPickPointID)
+            if debug: print(currPolyData.GetPointData().GetScalars().GetTuple(currPickPointID))
             
             # now change the colour at the picked vertex
             currPolyData.GetPointData().GetScalars().SetTuple(currPickPointID,(0,0,0,255)) #black for char array
-            if debug: print currPolyData.GetPointData().GetScalars().GetTuple(currPickPointID)
+            if debug: print(currPolyData.GetPointData().GetScalars().GetTuple(currPickPointID))
 
             # notify the stream that there has been a change
             currPolyData.Modified()
@@ -60,12 +60,12 @@ def drawingPickPoint(obj, ev):
             if obj.GetPicker().GetPointId() != -1: #catch non-picks 
                 obj.pickedPoints.InsertNextPoint(obj.GetPicker().GetPickPosition()[0], obj.GetPicker().GetPickPosition()[1], obj.GetPicker().GetPickPosition()[2])
             else:
-                print 'no point here! .. skipping'
+                print('no point here! .. skipping')
         except:
-            print 'are you clicking outside the object? - no point here?'
+            print('are you clicking outside the object? - no point here?')
             
     else:
-        if debug: print 'ignored left mouse click - not in draw mode'
+        if debug: print('ignored left mouse click - not in draw mode')
         pass
       
 
@@ -73,7 +73,7 @@ def drawingPickPoint(obj, ev):
 def drawingMakeROI(obj, ev):
 
     if obj.inDrawMode == 1:
-        print 'closing and filling ROI'
+        print('closing and filling ROI')
         
         # get the required surface
         currPolyData = obj.GetPicker().GetActor().GetMapper().GetInput()
@@ -130,7 +130,7 @@ def drawingMakeROI(obj, ev):
         selectedDat = clipROI.GetOutput().GetPoints().GetData()
         selectedArr = [] #place holder for loop
 
-        if debug: print selectedDat
+        if debug: print(selectedDat)
         
         for i in range(clipROI.GetOutput().GetNumberOfPoints()):        
             selectedArr.append(selectedDat.GetTuple(i)) #xyz
@@ -151,8 +151,8 @@ def drawingMakeROI(obj, ev):
         obj.filledROIPoints = where(in1d(origAll, selectedAll))[0]
         obj.ROI_ready = 1
 
-        if debug: print obj.filledROIPoints
-        if debug: print size(obj.filledROIPoints)
+        if debug: print(obj.filledROIPoints)
+        if debug: print(size(obj.filledROIPoints))
 
 
         ## -- back to drawing
@@ -172,7 +172,7 @@ def drawingMakeROI(obj, ev):
         obj.ren.AddActor(obj.roiActor)
         obj.Render()
 
-        if debug: print clipROI.GetOutput()
+        if debug: print(clipROI.GetOutput())
         
         #stop drawing mode and reset hte interactor to normal behaviour
         obj.inDrawMode = 0
@@ -183,7 +183,7 @@ def drawingMakeROI(obj, ev):
         # and clean up for the next loop? TODO? - or button to reset?
         
     else:
-        if debug: print 'ignored right mouse click - not in draw mode'
+        if debug: print('ignored right mouse click - not in draw mode')
         pass
 
 

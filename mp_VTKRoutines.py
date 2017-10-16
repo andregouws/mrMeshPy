@@ -49,8 +49,8 @@ def loadNewMesh(currVTKInstance, commandArgs, mainWindowUI, the_TCPserver):
 
 
     if debug:
-        print 'received request for new mesh with Args:'
-        print commandArgs
+        print('received request for new mesh with Args:')
+        print(commandArgs)
 
     # sanity check
     if ('vertices' in commandArgs[0]) and ('triangles' in commandArgs[1]):
@@ -68,15 +68,15 @@ def loadNewMesh(currVTKInstance, commandArgs, mainWindowUI, the_TCPserver):
     trianglesArgs = commandArgs[1].strip().split(',')
     triangles = unpackData(trianglesArgs[1], int(trianglesArgs[2]), the_TCPserver)
     triangles = array(triangles,'f')
-    if debug: print (triangles)
+    if debug: print(triangles)
     triangles = triangles.reshape((len(triangles)/3,3))    
-    if debug: print (triangles)
+    if debug: print(triangles)
                
     # load the surface colour data
     rVecArgs = commandArgs[2].strip().split(',')
     r_vec = unpackData(rVecArgs[1], int(rVecArgs[2]), the_TCPserver)
     r_vec = array(r_vec,'uint8')
-    print r_vec
+    if debug: print(r_vec)
     
     gVecArgs = commandArgs[3].strip().split(',')
     g_vec = unpackData(gVecArgs[1], int(gVecArgs[2]), the_TCPserver)
@@ -91,10 +91,10 @@ def loadNewMesh(currVTKInstance, commandArgs, mainWindowUI, the_TCPserver):
     a_vec = array(a_vec,'uint8')
         
     if debug:
-        print len(r_vec)
-        print len(g_vec)
-        print len(b_vec)
-        print len(a_vec)
+        print(len(r_vec))
+        print(len(g_vec))
+        print(len(b_vec))
+        print(len(a_vec))
       
     #combine into numpy array
     colorDat = squeeze(array(squeeze([r_vec,g_vec,b_vec,a_vec]),'B',order='F').transpose())
@@ -123,10 +123,10 @@ def loadNewMesh(currVTKInstance, commandArgs, mainWindowUI, the_TCPserver):
             polys.InsertCellPoint(int(triangles[i][j]))
 
     # check  
-    if debug: print points
-    if debug: print polys
-    if debug: print scalars 
-    if debug: print currVTKInstance
+    if debug: print(points)
+    if debug: print(polys)
+    if debug: print(scalars)
+    if debug: print(currVTKInstance)
 
     # Assemble as PolyData
     polyData = vtk.vtkPolyData()
@@ -198,7 +198,7 @@ def loadNewMesh(currVTKInstance, commandArgs, mainWindowUI, the_TCPserver):
         if key == 'l':
             currVTKinstance = len(mainWindowUI.vtkInstances)
             print(key)
-            print mainWindowUI.vtkInstances[currVTKinstance-1]
+            print(mainWindowUI.vtkInstances[currVTKinstance-1])
     
 
     #let's also track key presses per instance esp for the draw routine :)
@@ -224,8 +224,8 @@ def smoothMesh(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
     the_mapper = targetVTKWindow.curr_mapper
 
 
-    if debug: print targetVTKWindow.curr_actor.GetMapper().GetInput().GetPointData().GetScalars()
-    if debug: print targetVTKWindow.curr_actor.GetMapper().GetInput().GetPointData().GetScalars().GetTuple(1000)
+    if debug: print(targetVTKWindow.curr_actor.GetMapper().GetInput().GetPointData().GetScalars())
+    if debug: print(targetVTKWindow.curr_actor.GetMapper().GetInput().GetPointData().GetScalars().GetTuple(1000))
 
     #expecting a string that reads something like 'iterations,200,relaxationfactor,1.2'
     # sanity check
@@ -278,8 +278,8 @@ def updateMeshData(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
 
 
     if debug:
-        print 'received request for UPDATE DIRECT mesh with Args:'
-        print commandArgs
+        print('received request for UPDATE DIRECT mesh with Args:')
+        print(commandArgs)
 
     if len(commandArgs) != 0 : #new data has come from MATLAB so recompute
 
@@ -287,7 +287,7 @@ def updateMeshData(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
         rVecArgs = commandArgs[0].strip().split(',')
         r_vec = unpackData(rVecArgs[1], int(rVecArgs[2]), the_TCPserver)
         r_vec = array(r_vec,'uint8')
-        print r_vec
+        if debug: print(r_vec)
         
         gVecArgs = commandArgs[1].strip().split(',')
         g_vec = unpackData(gVecArgs[1], int(gVecArgs[2]), the_TCPserver)
@@ -302,10 +302,10 @@ def updateMeshData(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
         a_vec = array(a_vec,'uint8')
             
         if debug:
-            print len(r_vec)
-            print len(g_vec)
-            print len(b_vec)
-            print len(a_vec)
+            print(len(r_vec))
+            print(len(g_vec))
+            print(len(b_vec))
+            print(len(a_vec))
           
         #combine into numpy array
         colorDat = squeeze(array(squeeze([r_vec,g_vec,b_vec,a_vec]),'B',order='F').transpose())
@@ -341,7 +341,7 @@ def updateMeshData(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
     targetVTKWindow.curr_actor = newActor #lets keep track
     targetVTKWindow.ren.Render()
     targetVTKWindow.Render()
-    if debug: print 'success with direct mesh update routine'
+    print('success with direct mesh update routine')
 
 
 
@@ -353,12 +353,12 @@ def rotateMeshAnimation(currVTKInstance, commandArgs, mainWindowUI, the_TCPserve
     rotations = commandArgs[0].strip().split(',')
     rotations = unpackData(rotations[1], int(rotations[2]), the_TCPserver)
 
-    if debug: print rotations
+    if debug: print(rotations)
 
     targetVTKWindow = mainWindowUI.vtkInstances[int(currVTKInstance)] #NB zero indexing 
  
     camera = targetVTKWindow.ren.GetActiveCamera()
-    if debug: print camera
+    if debug: print(camera)
 
     for i in range(len(rotations)):
         camera.Azimuth(rotations[i])

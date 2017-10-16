@@ -67,9 +67,9 @@ class mrMeshPyMainWindow(QtWidgets.QMainWindow):
             self.ui.statusbar.showMessage(' ... in debug mode; loaded test VTK window ...')            
 
             def testMenuPrint(self):
-                print 'test menu print message'
+                print('test menu print message')
     
-            print dir(self.ui.actionDraw)
+            print(dir(self.ui.actionDraw))
             self.ui.actionDraw.triggered.connect(testMenuPrint)
         
         # some other test options    

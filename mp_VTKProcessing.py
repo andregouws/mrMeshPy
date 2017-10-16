@@ -33,7 +33,7 @@ def VTK_updateMesh(currVTKInstance, colorData, mainWindowUI):
     # user has send some new scalar values to be rendered on the mesh BUT COLORS ARE 
     # ALREADY CALCULATED IN MATLAB
 
-    if debug: print colorData
+    if debug: print(colorData)
     
     currVTKInstance.curr_polydata.GetPointData().SetScalars(colorData)
     currVTKInstance.curr_polydata.Modified()
@@ -48,7 +48,7 @@ def VTK_updateMesh(currVTKInstance, colorData, mainWindowUI):
     return newActor
 
     
-    if debug: print 'colorData processed in VTK_updateMeshDirect'
+    if debug: print('colorData processed in VTK_updateMeshDirect')
     
 
 
@@ -89,7 +89,7 @@ def VTK_updateMesh(currVTKInstance, newLUT, phaseData, cohData, cohThr, mainWind
     return newActor
 
     
-    if debug: print 'here'
+    if debug: print('here')
 
     
     

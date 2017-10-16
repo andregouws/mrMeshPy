@@ -57,13 +57,13 @@ def unpackData(incomingDataType, incomingNumberOfSamples, the_TCPserver):
         incomingBytes = struct.calcsize(incomingDataType)*incomingNumberOfSamples
 
         # report
-        print 'Expecting %i bytes from %i samples of %s dataType ... waiting ...' %(incomingBytes, incomingNumberOfSamples, incomingDataType)        
+        print('Expecting %i bytes from %i samples of %s dataType ... waiting ...' %(incomingBytes, incomingNumberOfSamples, incomingDataType))
 
         ##### Read number of data bytes ## TODO revise the weird behaviour here
         ####the_TCPserver.socket.waitForReadyRead()
 
         # report started
-        print "socket open"
+        print("socket open")
 
         # a placeholder that we append the incoming string to
         dataReceived = '' 
@@ -74,19 +74,19 @@ def unpackData(incomingDataType, incomingNumberOfSamples, the_TCPserver):
         # .. start reading ## TODO - 10ms timeout here OK?
         while bytesReceived < incomingBytes:
             the_TCPserver.socket.waitForReadyRead(10)
-            if debug: print 'bytesReceived', bytesReceived
+            if debug: print('bytesReceived', bytesReceived)
             tmp = the_TCPserver.socket.read(incomingBytes-bytesReceived)
             bytesReceived += len(tmp)
             dataReceived += tmp
 
-        print 'read completed ... '
+        print('read completed ... ')
 
         # now unpack the data to 
         dataObject = struct.unpack(incomingNumberOfSamples*incomingDataType, dataReceived)
-        print 'unpacked %i data points.. ' %incomingNumberOfSamples
-        print 'done loading incoming data!'
+        print('unpacked %i data points.. ' %incomingNumberOfSamples)
+        print('done loading incoming data!')
 
-        if debug: print dataObject[-10]
+        if debug: print(dataObject[-10])
     
         return dataObject
 

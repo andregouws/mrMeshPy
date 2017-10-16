@@ -116,7 +116,7 @@ def run_mp_command(commandName, commandArgs, theMeshInstance, mainWindowUI, the_
 
     
     else:
-        print 'mrMeshPy received a command it did not recognise'
+        print('mrMeshPy received a command it did not recognise')
         the_TCPserver.socket.write(str('send cmd error message back here TODO'))    
 
 
