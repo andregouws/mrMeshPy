@@ -1,7 +1,7 @@
 # mrMeshPy
 A Python, VTK6 and Qt5 dependent viewer to replace mrMesh (Stanford).
 
-Instrcution video can be see at https://youtu.be/NH_wEimGxVQ
+Instruction video can be see at https://youtu.be/NH_wEimGxVQ
 
 This Readme should be read in conjunction with the License.md file in this directory.
 
