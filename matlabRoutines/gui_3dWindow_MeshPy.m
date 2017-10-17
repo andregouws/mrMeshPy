@@ -111,6 +111,9 @@ currMesh = VOLUME{1}.meshNum3d;
 [VOLUME{1},~,~,~,VOLUME{1}.mesh{currMesh}] = meshColorOverlay(VOLUME{1},0);
 mrMeshPySend('updateMeshData',VOLUME{1});
 
+
+
+
 % --- Executes on button press in pushbutton_LoadMesh.
 function pushbutton_LoadMesh_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton_LoadMesh (see GCBO)
@@ -128,7 +131,7 @@ catch
 end
 
 % load the mesh to the VOLUME struct
-VOLUME{1} = meshLoad(VOLUME{1});
+VOLUME{1} = meshLoad(VOLUME{1},'./'); %start in the current directory for now %TODO later give options?
 
 try length(VOLUME{1}.mesh)
     
