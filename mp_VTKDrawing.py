@@ -85,6 +85,7 @@ def drawingMakeROI(obj, ev):
         #  show it as a separate surface "patch" - this allows easy control of transparency/colour etc
         
         # a vtk selection tool that loops around our points
+        if debug: print "before select polydata"
         selecta = vtk.vtkSelectPolyData()
         selecta.SetInputData(currPolyData)
         selecta.SetLoop(currPoints)
@@ -92,6 +93,7 @@ def drawingMakeROI(obj, ev):
         ## selecta.SetSelectionModeToSmallestRegion()
         selecta.SetSelectionModeToLargestRegion()
         selecta.Update()
+        if debug: print "after select polydata"
 
         # the tool that actually clips out the selected region
         clipROI = vtk.vtkClipPolyData()
