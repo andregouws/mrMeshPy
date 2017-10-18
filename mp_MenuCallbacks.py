@@ -75,19 +75,21 @@ def cb_MenuCloseAndFill():
 def startNewROI():
     global the_parent_UI
     currentIndex = the_parent_UI.tabWidget.currentIndex()
-    
-    #remove the overlaid roi actor
-    the_parent_UI.vtkInstances[currentIndex]._Iren.ren.RemoveActor(the_parent_UI.vtkInstances[currentIndex]._Iren.roiActor)
-    
-    # reset all pointers to ROI data
-    the_parent_UI.vtkInstances[currentIndex]._Iren.inDrawMode = 0 #TODO
-    the_parent_UI.vtkInstances[currentIndex]._Iren.pickedPointIds = [] #place holder for picked vtk point IDs so we can track
-    the_parent_UI.vtkInstances[currentIndex]._Iren.pickedPointOrigValues = [] #place holder for picked vtk point IDs so we can track
-    the_parent_UI.vtkInstances[currentIndex]._Iren.pickedPoints = vtk.vtkPoints() #place holder for picked vtk point IDs so we can track
-    style = vtk.vtkInteractorStyleTrackballCamera()
-    the_parent_UI.vtkInstances[currentIndex].SetInteractorStyle(style)
-    the_parent_UI.statusbar.showMessage("Old ROI drawing removed. New ROI started - enable drawing mode to continue ...")
-    
+    try:
+        #remove the overlaid roi actor
+        the_parent_UI.vtkInstances[currentIndex]._Iren.ren.RemoveActor(the_parent_UI.vtkInstances[currentIndex]._Iren.roiActor)
+        
+        # reset all pointers to ROI data
+        the_parent_UI.vtkInstances[currentIndex]._Iren.inDrawMode = 0 #TODO
+        the_parent_UI.vtkInstances[currentIndex]._Iren.pickedPointIds = [] #place holder for picked vtk point IDs so we can track
+        the_parent_UI.vtkInstances[currentIndex]._Iren.pickedPointOrigValues = [] #place holder for picked vtk point IDs so we can track
+        the_parent_UI.vtkInstances[currentIndex]._Iren.pickedPoints = vtk.vtkPoints() #place holder for picked vtk point IDs so we can track
+        style = vtk.vtkInteractorStyleTrackballCamera()
+        the_parent_UI.vtkInstances[currentIndex].SetInteractorStyle(style)
+        the_parent_UI.statusbar.showMessage("Old ROI drawing removed. New ROI started - enable drawing mode to continue ...")
+    except:
+        print "Error while trying to remove an exisiting ROI actor - does one actually exist yet?"
+
 
 def send10Bytes():
     global the_parent_UI
