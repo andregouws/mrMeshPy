@@ -95,11 +95,6 @@ def drawingMakeROI(obj, ev):
         selecta.Update()
         if debug: print "after select polydata"
 
-        # the tool that actually clips out the selected region
-        clipROI = vtk.vtkClipPolyData()
-        clipROI.SetInputConnection(selecta.GetOutputPort())
-        clipROI.Update()
-        
 
         ## TODO - consider a different clipping function
         ## the one below appears to clip front AND back surfaces?
@@ -113,77 +108,96 @@ def drawingMakeROI(obj, ev):
         #clipROI.Update()
 
 
-        ## -- track the point IDs
-        # unfortunately the clip tool does not keep a reference of the original surface
-        # point IDs (that we need to send bakc to other programs later
-        #  -- we need a pretty nasty bit or code to track the xyz positions extracted 
-        #     so that we can go back to the original surface and label these
-
-
-        # first, get the xyz position of all points in original surface
-        origDat = currPolyData.GetPoints().GetData()
-        origArr = []
+        # the tool that actually clips out the selected region
+        clipROI = vtk.vtkClipPolyData()
+        clipROI.SetInputConnection(selecta.GetOutputPort())
+        clipROI.Update()
         
-        for i in range(currPolyData.GetNumberOfPoints()):        
-            origArr.append(origDat.GetTuple(i))
-
-
-        # next get the xyz position of select points
-        selectedDat = clipROI.GetOutput().GetPoints().GetData()
-        selectedArr = [] #place holder for loop
-
-        if debug: print(selectedDat)
-        
-        for i in range(clipROI.GetOutput().GetNumberOfPoints()):        
-            selectedArr.append(selectedDat.GetTuple(i)) #xyz
-
-        ## now find matching indices in original using numpy manipulation
-        numpyOrigArr = array(origArr)
-        numpySelectedArr = array(selectedArr)
-
-        #if debug:
-        #    numpyOrigArr.tofile('orig.txt',',')
-        #    numpySelectedArr.tofile('new.txt',',')
-
-        # TODO - we only check the first 6 characters of the coordinate data - this may cause precision issues later - check
-        origAll = char.array(numpyOrigArr[:,0],'S6') + '-' + char.array(numpyOrigArr[:,1],'S6') + '-' + char.array(numpyOrigArr[:,2],'S6')
-        selectedAll = char.array(numpySelectedArr[:,0],'S6') + '-' + char.array(numpySelectedArr[:,1],'S6') + '-' + char.array(numpySelectedArr[:,2],'S6')
-
-        # and pipe it back to the original
-        obj.filledROIPoints = where(in1d(origAll, selectedAll))[0]
-        obj.ROI_ready = 1
-
-        if debug: print(obj.filledROIPoints)
-        if debug: print(size(obj.filledROIPoints))
-
-
-        ## -- back to drawing
-        # draw the new surface
-        roiMapper = vtk.vtkPolyDataMapper()
-        roiMapper.SetInputConnection(clipROI.GetOutputPort())
-        roiMapper.ScalarVisibilityOff()
-        roiMapper.Update()
-        
-        roiActor = vtk.vtkActor()
-        roiActor.SetVisibility(1)
-        roiActor.SetMapper(roiMapper)
-        roiActor.GetProperty().SetOpacity(0.5)
-        roiActor.GetProperty().SetColor(1.0,1.0,1.0)
-
-        obj.roiActor = roiActor;
-        obj.ren.AddActor(obj.roiActor)
-        obj.Render()
 
         if debug: print(clipROI.GetOutput())
-        
-        #stop drawing mode and reset hte interactor to normal behaviour
-        obj.inDrawMode = 0
 
-        style = vtk.vtkInteractorStyleTrackballCamera()
-        obj.SetInteractorStyle(style)
+        # --- try to get an ROI
+        if clipROI.GetOutput().GetNumberOfPoints() == 0:
+            #loop could not clip data for some reason - we need to clean up
+            obj.pickedPoints = vtk.vtkPoints() #new
+            #stop drawing mode and reset hte interactor to normal behaviour
+            obj.inDrawMode = 0
 
-        # and clean up for the next loop? TODO? - or button to reset?
-        
+            style = vtk.vtkInteractorStyleTrackballCamera()
+            obj.SetInteractorStyle(style)
+
+        else:
+
+            ## -- track the point IDs
+            # unfortunately the clip tool does not keep a reference of the original surface
+            # point IDs (that we need to send bakc to other programs later
+            #  -- we need a pretty nasty bit or code to track the xyz positions extracted 
+            #     so that we can go back to the original surface and label these
+
+
+            # first, get the xyz position of all points in original surface
+            origDat = currPolyData.GetPoints().GetData()
+            origArr = []
+            
+            for i in range(currPolyData.GetNumberOfPoints()):        
+                origArr.append(origDat.GetTuple(i))
+
+
+            # next get the xyz position of select points
+            selectedDat = clipROI.GetOutput().GetPoints().GetData()
+            selectedArr = [] #place holder for loop
+
+            if debug: print(selectedDat)
+            
+            for i in range(clipROI.GetOutput().GetNumberOfPoints()):        
+                selectedArr.append(selectedDat.GetTuple(i)) #xyz
+
+            ## now find matching indices in original using numpy manipulation
+            numpyOrigArr = array(origArr)
+            numpySelectedArr = array(selectedArr)
+
+            #if debug:
+            #    numpyOrigArr.tofile('orig.txt',',')
+            #    numpySelectedArr.tofile('new.txt',',')
+
+            # TODO - we only check the first 6 characters of the coordinate data - this may cause precision issues later - check
+            origAll = char.array(numpyOrigArr[:,0],'S6') + '-' + char.array(numpyOrigArr[:,1],'S6') + '-' + char.array(numpyOrigArr[:,2],'S6')
+            selectedAll = char.array(numpySelectedArr[:,0],'S6') + '-' + char.array(numpySelectedArr[:,1],'S6') + '-' + char.array(numpySelectedArr[:,2],'S6')
+
+            # and pipe it back to the original
+            obj.filledROIPoints = where(in1d(origAll, selectedAll))[0]
+            obj.ROI_ready = 1
+
+            if debug: print(obj.filledROIPoints)
+            if debug: print(size(obj.filledROIPoints))
+
+
+            ## -- back to drawing
+            # draw the new surface
+            roiMapper = vtk.vtkPolyDataMapper()
+            roiMapper.SetInputConnection(clipROI.GetOutputPort())
+            roiMapper.ScalarVisibilityOff()
+            roiMapper.Update()
+            
+            roiActor = vtk.vtkActor()
+            roiActor.SetVisibility(1)
+            roiActor.SetMapper(roiMapper)
+            roiActor.GetProperty().SetOpacity(0.5)
+            roiActor.GetProperty().SetColor(1.0,1.0,1.0)
+
+            obj.roiActor = roiActor;
+            obj.ren.AddActor(obj.roiActor)
+            obj.Render()
+
+            #stop drawing mode and reset hte interactor to normal behaviour
+            obj.inDrawMode = 0
+
+            style = vtk.vtkInteractorStyleTrackballCamera()
+            obj.SetInteractorStyle(style)
+
+            # and clean up for the next loop? TODO? - or button to reset?
+            obj.pickedPoints = vtk.vtkPoints() #new
+
     else:
         if debug: print('ignored right mouse click - not in draw mode')
         pass
