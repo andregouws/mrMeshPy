@@ -193,6 +193,21 @@ def loadNewMesh(currVTKInstance, commandArgs, mainWindowUI, the_TCPserver):
     mainWindowUI.vtkInstances[-1].curr_scalars = curr_scalars #Deep copied
 
 
+    # turns out that later processes access the inherited renderwindowinteractor (?) 
+    # so lets put all the above in the scope of that too  
+    mainWindowUI.vtkInstances[-1]._Iren.curr_actor = actor
+    mainWindowUI.vtkInstances[-1]._Iren.curr_smoother = smooth
+    mainWindowUI.vtkInstances[-1]._Iren.curr_polydata = polyData
+    mainWindowUI.vtkInstances[-1]._Iren.curr_mapper = pdm
+    mainWindowUI.vtkInstances[-1]._Iren.curr_camera = ren.GetActiveCamera()
+    mainWindowUI.vtkInstances[-1]._Iren.curr_points = points
+    mainWindowUI.vtkInstances[-1]._Iren.curr_polys = polys
+    mainWindowUI.vtkInstances[-1]._Iren.curr_scalars = curr_scalars #Deep copied
+
+    # and so we can access ui controls (e.g. statusbar) from the inherited window
+    mainWindowUI.vtkInstances[-1]._Iren.parent_ui = mainWindowUI
+
+
     def KeyPress(obj, evt):
         key = obj.GetKeySym()
         if key == 'l':

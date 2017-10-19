@@ -41,7 +41,13 @@ def VTK_updateMesh(currVTKInstance, colorData, mainWindowUI):
     currVTKInstance.curr_smoother.Update()
     currVTKInstance.curr_mapper.SetColorModeToDefault()
     currVTKInstance.curr_mapper.Modified()
-    
+
+    # in case of error when drawing ROIs we can revert the color map
+    # turns out that later processes access the inherited renderwindowinteractor (?) 
+    # so lets put all the above in the scope of that
+    currVTKInstance._Iren.ScalarsCopyForRevert = vtk.vtkUnsignedCharArray()
+    currVTKInstance._Iren.ScalarsCopyForRevert.DeepCopy(colorData)
+
     newActor = vtk.vtkActor()
     newActor.SetMapper(currVTKInstance.curr_mapper)
 

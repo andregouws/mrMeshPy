@@ -120,11 +120,31 @@ def drawingMakeROI(obj, ev):
         if clipROI.GetOutput().GetNumberOfPoints() == 0:
             #loop could not clip data for some reason - we need to clean up
             obj.pickedPoints = vtk.vtkPoints() #new
-            #stop drawing mode and reset hte interactor to normal behaviour
+            #stop drawing mode and reset the interactor to normal behaviour
             obj.inDrawMode = 0
+            
+            print 'Error while trying to close the ROI loop - resetting colours - please try again.'
+            print obj.ScalarsCopyForRevert
+
+            tmpScalarsCopyForRevert = vtk.vtkUnsignedCharArray()
+            tmpScalarsCopyForRevert.DeepCopy(obj.ScalarsCopyForRevert)
+
+            obj.curr_polydata.GetPointData().SetScalars(obj.ScalarsCopyForRevert)
+            obj.curr_polydata.Modified()                            
+
+            obj.ScalarsCopyForRevert = tmpScalarsCopyForRevert; #AND LOCK IN CURRENT STATE
+
+            obj.curr_smoother.Update()
+            obj.curr_mapper.SetColorModeToDefault()
+            obj.curr_mapper.Modified()
 
             style = vtk.vtkInteractorStyleTrackballCamera()
             obj.SetInteractorStyle(style)
+
+            obj.ren.Render()
+            obj.Render()
+
+            obj.parent_ui.statusbar.showMessage("Failed to close and fill ROI! Perhaps the surface is too spikey? - try smoothing.")
 
         else:
 
@@ -191,6 +211,19 @@ def drawingMakeROI(obj, ev):
 
             #stop drawing mode and reset hte interactor to normal behaviour
             obj.inDrawMode = 0
+
+            #remove our black dots
+            tmpScalarsCopyForRevert = vtk.vtkUnsignedCharArray()
+            tmpScalarsCopyForRevert.DeepCopy(obj.ScalarsCopyForRevert)
+
+            obj.curr_polydata.GetPointData().SetScalars(obj.ScalarsCopyForRevert)
+            obj.curr_polydata.Modified()                            
+
+            obj.ScalarsCopyForRevert = tmpScalarsCopyForRevert; #AND LOCK IN CURRENT STATE
+
+            obj.curr_smoother.Update()
+            obj.curr_mapper.SetColorModeToDefault()
+            obj.curr_mapper.Modified()
 
             style = vtk.vtkInteractorStyleTrackballCamera()
             obj.SetInteractorStyle(style)
