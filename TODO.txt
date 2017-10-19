@@ -18,5 +18,6 @@ Priority(0 crucial, 1 high, 2 low, 3 wishlist) -- Action -- Assigned to
 (2) -- review timeouts in TCP server -- AG / MH
  
 (3) -- add “current session save” -- AG
+(3) -- incorporate code for handle removal - AG
 (3) -- incorporate code for removing “spikes” (have this in DV3D) - AG
 (3) -- incorporate code for surface clipping (have this in DV3D) - AG
