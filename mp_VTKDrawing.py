@@ -29,16 +29,17 @@ def drawingPickPoint(obj, ev):
 
     if obj.inDrawMode == 1:
 
-        #get the pick position
-        obj.GetPicker().Pick(obj.GetEventPosition()[0], obj.GetEventPosition()[1], 0,  obj.GetRenderWindow().GetRenderers().GetFirstRenderer())
-        if debug: print(obj.GetPicker().GetPointId())
-        currPickPointID = obj.GetPicker().GetPointId()
-        obj.pickedPointIds.append(currPickPointID) # append to place holder for picked vtk point IDs so we can track   
+        try: #TODO will this capture non-pick events?
+            #get the pick position
+            obj.GetPicker().Pick(obj.GetEventPosition()[0], obj.GetEventPosition()[1], 0,  obj.GetRenderWindow().GetRenderers().GetFirstRenderer())
+            if debug: print(obj.GetPicker().GetPointId())
+            currPickPointID = obj.GetPicker().GetPointId()
+            obj.pickedPointIds.append(currPickPointID) # append to place holder for picked vtk point IDs so we can track   
 
-        ##draw on the selected vertices -just change each selected vertex for now -- we'll join the dots later
-        
-        # get the required surface
-        try:
+            ##draw on the selected vertices -just change each selected vertex for now -- we'll join the dots later
+            
+            # get the required surface
+
             currPolyData = obj.GetPicker().GetActor().GetMapper().GetInput()
             if debug: print(currPolyData.GetPointData().GetScalars().GetValue(currPickPointID))
             
@@ -62,7 +63,7 @@ def drawingPickPoint(obj, ev):
             else:
                 print('no point here! .. skipping')
         except:
-            print('are you clicking outside the object? - no point here?')
+            print('ignored left mouse click - outside the object? - no point EXACTLY here? - Try again')
             
     else:
         if debug: print('ignored left mouse click - not in draw mode')

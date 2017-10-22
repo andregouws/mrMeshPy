@@ -66,7 +66,9 @@ def run_mp_command(commandName, commandArgs, theMeshInstance, mainWindowUI, the_
         #load data and generate the mesh
         loadNewMesh(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver)
         mainWindowUI.statusbar.showMessage(' ... New mesh Loaded ...')
-        the_TCPserver.socket.write(str('send useful message back here TODO'))
+        #the_TCPserver.socket.write(str('send useful message back here TODO'))
+        the_TCPserver.socket.write(str('1001'))        
+        
 
 
     elif commandName == 'smoothMesh':

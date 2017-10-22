@@ -42,7 +42,7 @@ class mrMeshPyMainWindow(QtWidgets.QMainWindow):
 
         # TODO - hard code TCP port 9999 for now #next available may be better
         if not self.server.listen(QtNetwork.QHostAddress('127.0.0.1'), 9999):
-            print('Error strating TCP instance on requested port - quitting.')
+            print('Error starting TCP instance on requested port - quitting.')
             return
         print('Running TCP instance on port %d' % self.server.serverPort())
 

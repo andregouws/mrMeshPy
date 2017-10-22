@@ -49,6 +49,18 @@ def cb_MenuEnableDraw():
     style = vtk.vtkInteractorStyleUser()
     the_parent_UI.vtkInstances[currentIndex].SetInteractorStyle(style)
     the_parent_UI.statusbar.showMessage("In DRAW ROI Mode! - rotation/zoom disabled - (Menu-ROIs-Disable Draw to continue) ..")
+    
+    # it has become apparent that users may start drawing a new ROI before an old one is removed.
+    # this can cause problems if the old temporary overlay surface is still present
+    # what we'll do is detect if a closed roi surface is present, and - if so - remove it.
+    
+    try:
+    #remove the overlaid roi actor
+        the_parent_UI.vtkInstances[currentIndex]._Iren.ren.RemoveActor(the_parent_UI.vtkInstances[currentIndex]._Iren.roiActor)
+        print "Removed an exiting temporary ROI surface to start a new one."
+    except:
+        pass
+        
 
 def cb_MenuDisableDraw():
     global the_parent_UI
