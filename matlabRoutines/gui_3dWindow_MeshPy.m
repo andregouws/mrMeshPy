@@ -319,6 +319,7 @@ mrGlobals;
  end
  
 % build the mesh
+which meshBuild
 VOLUME{1} = meshBuild(VOLUME{1}, hemi);
 
 % ask is we would liek to load to mrMeshPy?
