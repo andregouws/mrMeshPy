@@ -31,7 +31,9 @@ def drawingPickPoint(obj, ev):
 
         try: #TODO will this capture non-pick events?
             #get the pick position
+            if debug: print "started pick"
             obj.GetPicker().Pick(obj.GetEventPosition()[0], obj.GetEventPosition()[1], 0,  obj.GetRenderWindow().GetRenderers().GetFirstRenderer())
+            if debug: print "ended pick"
             if debug: print(obj.GetPicker().GetPointId())
             currPickPointID = obj.GetPicker().GetPointId()
             obj.pickedPointIds.append(currPickPointID) # append to place holder for picked vtk point IDs so we can track   

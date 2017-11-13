@@ -32,3 +32,4 @@ vertexGrayMap = mrmMapVerticesToGray(...
     viewGet(vw, 'edges'));
 msh = meshSet(msh, 'vertexgraymap', vertexGrayMap);
 save ./test3.mat msh
+
