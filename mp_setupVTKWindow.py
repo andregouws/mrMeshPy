@@ -59,6 +59,9 @@ def mrMeshVTKWindow(parentUI, data):
     style = vtk.vtkInteractorStyleTrackballCamera()
     parentUI.vtkInstances[-1].SetInteractorStyle(style)
 
+    # flip the camera 
+    parentUI.vtkInstances[-1].ren.GetActiveCamera().SetViewUp(0,-1,0)
+
     if data == 'debug':
         loadTestVTKWindow(parentUI)
     else:
