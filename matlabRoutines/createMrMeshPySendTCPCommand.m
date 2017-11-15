@@ -35,7 +35,9 @@ cmdString = [cmdString, ';']; % seperator
 cmdString = [cmdString, cmdStruct.CommandToSend]; % the command to send - must be in mrMeshPyCommandsList
 cmdString = [cmdString, ';']; % seperator
 
-cmdString = [cmdString, num2str(cmdStruct.TargetMeshSession)]; % instance number of mrMesh sub-window
+% major change here -  no longer an instance number but a unique string
+% identifier
+cmdString = [cmdString, num2str(cmdStruct.TargetMeshSession)]; % unique identifier of mrMesh sub-window
 cmdString = [cmdString, ';']; % seperator
 
 % Process the extra arg strings by looping through our Arg cell array

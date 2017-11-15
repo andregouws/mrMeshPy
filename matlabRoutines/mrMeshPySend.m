@@ -58,7 +58,7 @@ if strcmp(the_command, 'sendNewMeshData') == 1
     
     theCommandStruct = struct('cmdIdentifier','cmd'); %always start a command with this
     theCommandStruct.CommandToSend = 'loadNewMesh'; % a command listed in mrMeshPyCommandsList.m
-    theCommandStruct.TargetMeshSession = 0; % new mesh so no exisitng index required
+    theCommandStruct.TargetMeshSession = msh.mrMeshPyID; % function to create unique ID based on system clock
     theCommandStruct.Args = {}; % we will use a cell array to pass all the extra arguments we want
     
     % set up the first extra arg: mrMeshPy will be expecting a data blob
@@ -117,13 +117,15 @@ if strcmp(the_command, 'sendNewMeshData') == 1
 elseif strcmp(the_command, 'smoothMesh') == 1
     %simple smoothing routine
     
-    targetMesh = the_data(1);
-    iterations = the_data(2);
-    relaxationfactor = the_data(3);
+    the_data
+    
+    targetMesh = the_data{1};
+    iterations = the_data{2};
+    relaxationfactor = the_data{3};
     
     theCommandStruct = struct('cmdIdentifier','cmd'); %always start a command with this
     theCommandStruct.CommandToSend = 'smoothMesh'; % a command listed in mrMeshPyCommandsList.m
-    theCommandStruct.TargetMeshSession = targetMesh - 1; % integer pointing to target mrMeshypy sub-window, minus one for zero-index in python
+    theCommandStruct.TargetMeshSession = targetMesh; % BIG change here - string identifier now
     theCommandStruct.Args = {}; % we will use a cell array to pass all the extra arguments we want
     
     theCommandStruct.Args{1} = ['iterations,',num2str(iterations),',relaxationfactor,',num2str(relaxationfactor)];
@@ -176,7 +178,7 @@ elseif strcmp(the_command, 'updateMeshData') == 1
     theCommandStruct = struct('cmdIdentifier','cmd'); %always start a command with this
     theCommandStruct.CommandToSend = 'updateMeshData'; % a command listed in mrMeshPyCommandsList.m
     currMesh = currView.meshNum3d; % keep track of current / apt / target mesh
-    theCommandStruct.TargetMeshSession = currMesh - 1; % integer pointing to target mrMeshypy sub-window, minus one for zero-index in python
+    theCommandStruct.TargetMeshSession = currView.mesh{currMesh}.mrMeshPyID; % unique string id  for this mesh
     theCommandStruct.Args = {}; % we will use a cell array to pass all the extra arguments we want
     
     % mrMeshPy will be expecting a data blob of R values for the colour
@@ -229,7 +231,7 @@ elseif strcmp(the_command, 'checkMeshROI') == 1
     
     theCommandStruct = struct('cmdIdentifier','cmd'); %always start a command with this
     theCommandStruct.CommandToSend = 'checkMeshROI'; % a command listed in mrMeshPyCommandsList.m
-    theCommandStruct.TargetMeshSession = currMesh - 1; % integer pointing to target mrMeshypy sub-window, minus one for zero-index in python
+    theCommandStruct.TargetMeshSession = currView.mesh{currMesh}.mrMeshPyID; % unique string pointing to vtk session
     theCommandStruct.Args = {}; % we will use a cell array to pass all the extra arguments we want
     
     % get our wrapper to generate our command for us
@@ -278,7 +280,7 @@ elseif strcmp(the_command, 'checkMeshROI') == 1
     
     theCommandStruct = struct('cmdIdentifier','cmd'); %always start a command with this
     theCommandStruct.CommandToSend = 'sendROIVertices'; % a command listed in mrMeshPyCommandsList.m
-    theCommandStruct.TargetMeshSession = currMesh - 1; % integer pointing to target mrMeshypy sub-window, minus one for zero-index in python
+    theCommandStruct.TargetMeshSession = currView.mesh{currMesh}.mrMeshPyID; % unique string pointing to vtk session
     theCommandStruct.Args = {}; % we will use a cell array to pass all the extra arguments we want% tell meshPy we're ready for the vertices
     
     % get our wrapper to generate our command for us

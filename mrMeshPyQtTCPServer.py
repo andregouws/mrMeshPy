@@ -1,4 +1,4 @@
-#!/usr/bin/python
+ #!/usr/bin/python
 
 '''
 A TCP server in QT to handle mrVista throughput to mrMeshPy
@@ -69,6 +69,7 @@ class mrMeshPyQtTCPServer(QtNetwork.QTcpServer):
             commandName = incomingData[4]
 
             # field 6 (index 5) -- the incoming command should always reference a particular mesh instance
+            # Major change here - no longer an index - will be a unique string identifier related to clock
             theMeshInstance = incomingData[5]
             
 
@@ -80,7 +81,7 @@ class mrMeshPyQtTCPServer(QtNetwork.QTcpServer):
                 commandArgs.append(incomingData[i])
                 
             # report the incoming command
-            print('.. attempting to run command: %s\n with args: %s \n on mesh window %i ..' %(commandName, str(commandArgs), int(theMeshInstance)))
+            print('.. attempting to run command: %s\n with args: %s \n on mesh window %s ..' %(commandName, str(commandArgs), str(theMeshInstance)))
 
             #and try to run it
             run_mp_command(commandName, commandArgs, theMeshInstance, self.mainWindow.ui, self)

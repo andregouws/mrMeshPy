@@ -52,6 +52,8 @@ from mp_VTKRoutines import *
 from mp_SendFunctions import *
 
 
+debug = True
+
 
 # master command handler
 
@@ -59,53 +61,64 @@ def run_mp_command(commandName, commandArgs, theMeshInstance, mainWindowUI, the_
 
     if commandName == 'loadNewMesh':
         mainWindowUI.statusbar.showMessage(' ... attempting to load new mesh ...')  
+
+        # TODO - index will now be a new entry at the end of the exisitng .ui.vtkInstances list
+        newIndex = len(mainWindowUI.vtkInstances) #could be zero
+
+        # create an entry in the vtkDict to link the unique mesh ID to where it is stored
+        #  in the vtkInstances list
+        mainWindowUI.vtkDict[theMeshInstance] = newIndex
+        
         # add a new tab with a new wVTK window
         mrMeshVTKWindow(mainWindowUI, 'None')
-        mainWindowUI.tabWidget.setCurrentIndex(int(theMeshInstance)) #zero indexed 
+
+        mainWindowUI.tabWidget.setCurrentIndex(newIndex) #zero indexed 
         mainWindowUI.tabWidget.update()
+        
         #load data and generate the mesh
         loadNewMesh(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver)
         mainWindowUI.statusbar.showMessage(' ... New mesh Loaded ...')
         #the_TCPserver.socket.write(str('send useful message back here TODO'))
-        the_TCPserver.socket.write(str('1001'))        
+        the_TCPserver.socket.write(str('1001'))   
+        if debug: print mainWindowUI.vtkDict
         
 
 
     elif commandName == 'smoothMesh':
-        mainWindowUI.statusbar.showMessage(' ... attempting to smooth mesh %i ...' %(int(theMeshInstance)+1))
+        mainWindowUI.statusbar.showMessage(' ... attempting to smooth mesh with id %s ...' %(theMeshInstance))
         #load data and generate the mesh
         smoothMesh(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver)
-        mainWindowUI.statusbar.showMessage(' ... Finished smoothing mesh %i ...' %(int(theMeshInstance)+1))
+        mainWindowUI.statusbar.showMessage(' ... Finished smoothing mesh with id %s ...' %(theMeshInstance))
         the_TCPserver.socket.write(str('send useful message back here TODO'))
 
 
     elif commandName == 'updateMeshData':
-        mainWindowUI.statusbar.showMessage(' ... updating mesh %i with current View settings DIRECT METCHOD ...' %(int(theMeshInstance)+1))
+        mainWindowUI.statusbar.showMessage(' ... updating mesh with id %s with current View settings ...' %(theMeshInstance))
         #load data and send to the mesh
         updateMeshData(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver)
-        mainWindowUI.statusbar.showMessage(' ... Finished: updated data for mesh%i: DIRECT METHOD...' %(int(theMeshInstance)+1))
+        mainWindowUI.statusbar.showMessage(' ... Finished: updated data for mesh id %s ...' %(theMeshInstance))
         the_TCPserver.socket.write(str('send useful message back here TODO'))
 
 
     elif commandName == 'checkMeshROI':
-        mainWindowUI.statusbar.showMessage(' ... MATLAB requested an ROI from mesh%i ...' %(int(theMeshInstance)+1))
+        mainWindowUI.statusbar.showMessage(' ... MATLAB requested an ROI from mesh id %s ...' %(theMeshInstance))
         #get roi data (if exists) and send to matlab
         error = sendROIInfo(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver) #returns 1 or 0
         if error == 0:
-            mainWindowUI.statusbar.showMessage(' ... ROI ready to send to MATLAB from mesh%i...' %(int(theMeshInstance)+1))
+            mainWindowUI.statusbar.showMessage(' ... ROI ready to send to MATLAB from mesh id %s...' %(theMeshInstance))
         else:
-            mainWindowUI.statusbar.showMessage(' ... No ROI to send to MATLAB from mesh%i...' %(int(theMeshInstance)+1))
+            mainWindowUI.statusbar.showMessage(' ... No ROI to send to MATLAB from mesh id %s...' %(theMeshInstance))
         the_TCPserver.socket.write(str('send useful message back here TODO'))
 
 
     elif commandName == 'sendROIVertices':
-        mainWindowUI.statusbar.showMessage(' ... MATLAB requested an ROI from mesh%i ...' %(int(theMeshInstance)+1))
+        mainWindowUI.statusbar.showMessage(' ... MATLAB requested an ROI from mesh id %s ...' %(theMeshInstance))
         #get roi data (if exists) and send to matlab
         error = sendROIVertices(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver) #returns 1 or 0
         if error == 0:
-            mainWindowUI.statusbar.showMessage(' ... ROI ready to send to MATLAB from mesh%i...' %(int(theMeshInstance)+1))
+            mainWindowUI.statusbar.showMessage(' ... ROI ready to send to MATLAB from mesh id %s...' %(theMeshInstance))
         else:
-            mainWindowUI.statusbar.showMessage(' ... No ROI to send to MATLAB from mesh%i...' %(int(theMeshInstance)+1))
+            mainWindowUI.statusbar.showMessage(' ... No ROI to send to MATLAB from mesh id %s...' %(theMeshInstance))
         the_TCPserver.socket.write(str('send useful message back here TODO'))
 
 

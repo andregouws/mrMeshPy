@@ -19,7 +19,7 @@ def sendROIInfo(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
     # when a request for ROI info comes in, this sends an initial confirmation that an ROI is available
 
     try:
-        targetVTKWindow = mainWindowUI.vtkInstances[int(theMeshInstance)] 
+        targetVTKWindow = mainWindowUI.vtkInstances[mainWindowUI.vtkDict[theMeshInstance]]
         data_to_send = targetVTKWindow._Iren.filledROIPoints
 
         num2send = len(data_to_send)
@@ -35,7 +35,7 @@ def sendROIInfo(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
 
 def sendROIVertices(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
     # when a request for ROI info comes we send the data after the confirmation (sendROIInfo above)
-    targetVTKWindow = mainWindowUI.vtkInstances[int(theMeshInstance)] 
+    targetVTKWindow = mainWindowUI.vtkInstances[mainWindowUI.vtkDict[theMeshInstance]] 
     data_to_send = targetVTKWindow._Iren.filledROIPoints
 
     the_TCPserver.socket.waitForReadyRead(10)

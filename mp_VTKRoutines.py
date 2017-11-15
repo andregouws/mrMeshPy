@@ -226,10 +226,13 @@ def loadNewMesh(currVTKInstance, commandArgs, mainWindowUI, the_TCPserver):
 def smoothMesh(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
     
     #lets get the apt window 
-    targetVTKWindow = mainWindowUI.vtkInstances[int(theMeshInstance)] #NB zero indexing 
+    ### targetVTKWindow = mainWindowUI.vtkInstances[int(theMeshInstance)] 
+
+    # unique string should return index to correct window / tab
+    targetVTKWindow = mainWindowUI.vtkInstances[mainWindowUI.vtkDict[theMeshInstance]] 
 
     # lets show the correct tab
-    mainWindowUI.tabWidget.setCurrentIndex(int(theMeshInstance)) #zero index
+    mainWindowUI.tabWidget.setCurrentIndex(int(mainWindowUI.vtkDict[theMeshInstance])) 
     #mainWindowUI.tabWidget.repaint()
     mainWindowUI.tabWidget.update()
 
@@ -272,10 +275,10 @@ def updateMeshData(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
     # VISTA - i.e. do not go through a lookuptable
     
     #lets get the apt window 
-    targetVTKWindow = mainWindowUI.vtkInstances[int(theMeshInstance)] #NB zero indexing 
+    targetVTKWindow = mainWindowUI.vtkInstances[mainWindowUI.vtkDict[theMeshInstance]] 
 
     # lets show the correct tab
-    mainWindowUI.tabWidget.setCurrentIndex(int(theMeshInstance)) #zero index
+    mainWindowUI.tabWidget.setCurrentIndex(int(mainWindowUI.vtkDict[theMeshInstance])) #zero index
     #mainWindowUI.tabWidget.repaint()
     mainWindowUI.tabWidget.update()
 

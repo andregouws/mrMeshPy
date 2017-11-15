@@ -137,6 +137,9 @@ try length(VOLUME{1}.mesh)
     
     if length(VOLUME{1}.mesh) > currMeshCount %a new mesh has been added
         
+        % create a unique ID for the mesh based on a timestamp (clock)
+        VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID = makeUniqueID;
+        
         % send the newly loaded mesh to the viewer
         mrMeshPySend('sendNewMeshData',VOLUME{1}.mesh{VOLUME{1}.meshNum3d});
         
@@ -144,9 +147,9 @@ try length(VOLUME{1}.mesh)
         currString = get(handles.popupmenu_Meshes,'string')
         
         if strcmp(currString,'None')
-            newstring = char(['mesh',num2str(VOLUME{1}.meshNum3d)]);
+            newstring = char(['mesh',num2str(VOLUME{1}.meshNum3d),'-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
         else
-            newstring = char(currString,['mesh',num2str(VOLUME{1}.meshNum3d)]);
+            newstring = char(currString,['mesh',num2str(VOLUME{1}.meshNum3d),'-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
         end
         
         set(handles.popupmenu_Meshes,'string',newstring)
@@ -173,11 +176,14 @@ function popupmenu_Meshes_Callback(hObject, eventdata, handles)
 
 mrGlobals;
 
-contents = cellstr(get(hObject,'String'));
-meshNum = contents{get(hObject,'Value')};
+% % %assignin('base','hObj',hObject)
+% % %contents = cellstr(get(hObject,'String'))
+% % %meshNum = contents{get(hObject,'Value')}
 
-meshNum = meshNum(5:end); %TODO improve
-VOLUME{1}.meshNum3d = str2num(meshNum);
+meshNum = hObject.Value; %should be the index
+
+%%%meshNum = meshNum(5:end); %TODO improve
+VOLUME{1}.meshNum3d = meshNum
 
 
 % --- Executes during object creation, after setting all properties.
@@ -222,10 +228,10 @@ iterations = str2num(iterations);
 assignin('base','iterations',iterations);
 assignin('base','relax',relax);
 
-currMesh = VOLUME{1}.meshNum3d;
+currMeshID = VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID;
 
 disp('here1')
-mrMeshPySend('smoothMesh',[currMesh,iterations,relax]);
+mrMeshPySend('smoothMesh',{currMeshID,iterations,relax});
 
 
 function edit_relaxationFactor_Callback(hObject, eventdata, handles)
@@ -336,6 +342,10 @@ if strcmp(loadNow,'No')
     return
 else
     %assume yes
+
+    % create a unique ID for the mesh based on a timestamp (clock)
+    VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID = makeUniqueID;
+            
     % send the newly loaded mesh to the viewer
     mrMeshPySend('sendNewMeshData',VOLUME{1}.mesh{VOLUME{1}.meshNum3d});
 
@@ -343,9 +353,9 @@ else
     currString = get(handles.popupmenu_Meshes,'string')
 
     if strcmp(currString,'None')
-        newstring = char(['mesh',num2str(VOLUME{1}.meshNum3d)]);
+        newstring = char(['mesh',num2str(VOLUME{1}.meshNum3d),'-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
     else
-        newstring = char(currString,['mesh',num2str(VOLUME{1}.meshNum3d)]);
+        newstring = char(currString,['mesh',num2str(VOLUME{1}.meshNum3d),'-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
     end
 
     set(handles.popupmenu_Meshes,'string',newstring)
@@ -354,10 +364,6 @@ end
     
 
 
-
-
-
-                
                 
                 
                 
