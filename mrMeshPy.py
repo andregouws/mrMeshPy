@@ -21,10 +21,9 @@ from PyQt5 import QtCore, QtGui, QtNetwork, QtWidgets
 
 
 #for debugging/testing
-debug = True
+debug = False
 test = False
 
-if debug: print 'hello'
 
 class mrMeshPyMainWindow(QtWidgets.QMainWindow):
 
@@ -75,8 +74,6 @@ class mrMeshPyMainWindow(QtWidgets.QMainWindow):
             def testMenuPrint(self):
                 print('test menu print message')
     
-            print(dir(self.ui.actionDraw))
-            self.ui.actionDraw.triggered.connect(testMenuPrint)
         
         # some other test options    
         if test:
