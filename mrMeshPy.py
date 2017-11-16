@@ -21,9 +21,10 @@ from PyQt5 import QtCore, QtGui, QtNetwork, QtWidgets
 
 
 #for debugging/testing
-debug = False
+debug = True
 test = False
 
+if debug: print 'hello'
 
 class mrMeshPyMainWindow(QtWidgets.QMainWindow):
 
