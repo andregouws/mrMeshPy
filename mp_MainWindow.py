@@ -36,6 +36,7 @@ class Ui_MrMeshMainWindow(object):
         MrMeshMainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MrMeshMainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 708, 19))
+        self.menubar.setNativeMenuBar(False)
         self.menubar.setObjectName("menubar")
         self.menuMenu = QtWidgets.QMenu(self.menubar)
         self.menuMenu.setObjectName("menuMenu")

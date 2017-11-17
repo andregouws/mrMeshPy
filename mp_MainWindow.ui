@@ -60,6 +60,9 @@
      <height>19</height>
     </rect>
    </property>
+   <property name="nativeMenuBar">
+    <bool>false</bool>
+   </property>
    <widget class="QMenu" name="menuMenu">
     <property name="title">
      <string>Menu</string>
