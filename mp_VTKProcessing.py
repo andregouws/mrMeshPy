@@ -11,19 +11,23 @@ def VTK_smoothing(the_smoother, the_mapper, iterations, relaxation_factor):
     # Standard way to perform mesh smoothing via relaxation in VTK.
     # I'm pretty sure this is a direct replication of what mrMesh was
     # doing before.
-    
+
+    if debug: print 'starting smoothing'
     the_smoother.SetNumberOfIterations(iterations)
     the_smoother.SetRelaxationFactor(relaxation_factor)
     the_smoother.Modified()
     the_smoother.Update()
-    
+
+    if debug: print 'finished smoothing -setting up mapper'    
     the_mapper.SetInputConnection(the_smoother.GetOutputPort())
     the_mapper.SetScalarModeToUsePointData()
     the_mapper.SetColorModeToDefault()
     the_mapper.Modified()
-    
+
+    if debug: print 'finished mapper -setting up actor'        
     newActor = vtk.vtkActor()
     newActor.SetMapper(the_mapper)
+    if debug: print 'finished actor'        
 
     return newActor
     

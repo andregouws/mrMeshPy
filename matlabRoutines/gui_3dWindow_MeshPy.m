@@ -151,9 +151,11 @@ try length(VOLUME{1}.mesh)
         else
             newstring = char(currString,['mesh',num2str(VOLUME{1}.meshNum3d),'-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
         end
-        
+        disp 'here1'
+        VOLUME{1}.meshNum3d
+        set(handles.popupmenu_Meshes,'value',VOLUME{1}.meshNum3d) ;        
         set(handles.popupmenu_Meshes,'string',newstring)
-        set(handles.popupmenu_Meshes,'value',VOLUME{1}.meshNum3d) ;
+        disp 'here2'
     else % no new mesh added
         disp('User cancelled mesh load or there was an error loading ...');
     end
@@ -183,7 +185,7 @@ mrGlobals;
 meshNum = hObject.Value; %should be the index
 
 %%%meshNum = meshNum(5:end); %TODO improve
-VOLUME{1}.meshNum3d = meshNum
+VOLUME{1}.meshNum3d = meshNum;
 
 
 % --- Executes during object creation, after setting all properties.
@@ -357,9 +359,9 @@ else
     else
         newstring = char(currString,['mesh',num2str(VOLUME{1}.meshNum3d),'-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
     end
-
-    set(handles.popupmenu_Meshes,'string',newstring)
+    
     set(handles.popupmenu_Meshes,'value',VOLUME{1}.meshNum3d) ;
+    set(handles.popupmenu_Meshes,'string',newstring);
 end
     
 

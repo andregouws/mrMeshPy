@@ -254,18 +254,23 @@ def smoothMesh(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
     else:
         return "error - expecting vertices, then curvature, then triangles!"
 
+    if debug: print 'starting smoothing callback'
     newActor = VTK_smoothing(the_smoother, the_mapper, iterations, relaxationfactor)
 
+    if debug: print  'smoothing callback returned new actor'
+
+    if debug: print  'removing old actor'
     targetVTKWindow.ren.RemoveActor(targetVTKWindow.curr_actor)
+    if debug: print  'adding new actor'
     targetVTKWindow.ren.AddActor(newActor)
 
+    if debug: print  'added new actor - changing curr actor pointer'
     targetVTKWindow.curr_actor = newActor #lets keep track
-    targetVTKWindow.ren.Render()
-    targetVTKWindow.Render()
 
+    if debug: print  'trying to update '    
     # run mesh update to reset the color map (smoothing "messes" this up)
     updateMeshData(theMeshInstance, [], mainWindowUI, the_TCPserver)
-    
+    if debug: print  'update completed'    
 
 
 def updateMeshData(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
