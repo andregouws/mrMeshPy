@@ -327,10 +327,9 @@ mrGlobals;
  end
  
 % build the mesh
-which meshBuild
-VOLUME{1} = meshBuild(VOLUME{1}, hemi);
+VOLUME{1} = meshBuild_mrMeshPy(VOLUME{1}, hemi);
 
-% ask is we would liek to load to mrMeshPy?
+% ask if we would like to load to mrMeshPy?
 
 % Include the desired Default answer
 options.Interpreter = 'tex';
