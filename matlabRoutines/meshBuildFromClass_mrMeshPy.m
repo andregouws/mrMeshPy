@@ -91,20 +91,28 @@ meshBuildPath = which(mfilename);
 %reshape the voxel array 
 voxels = permute(voxels,[3,2,1]);
 
+% create a tmp file to write the data to
+voxFileForMrMeshPy = [tempname,'.mat'];
+mshFileFromMrMeshPy = [tempname,'.mat'];
+
+
 %run the pyMeshBuild.py program to generate the meshes
-if ismac
-    % Code to run on Mac plaform
-    disp('Platform not supported')
-    barf for now
-elseif isunix
+if isunix
     % Linux
     % save the voxel data to a tmp file
-    save /tmp/voxels.mat voxels mmPerVox;
-    cmdString = [meshBuildDir,'/launchMeshBuild.sh ',meshBuildDir,'/pyMeshBuild.py']
+    eval(['save ',voxFileForMrMeshPy,' voxels mmPerVox;']);
+    %run the pyMeshBuild app
+    cmdString = [meshBuildDir,'/launchMeshBuild.sh ',meshBuildDir,'/pyMeshBuild.py ',voxFileForMrMeshPy,' ',mshFileFromMrMeshPy]
     system(cmdString);
-    
+elseif ismac
+    % Mac - same as linux? #TODO
+    % save the voxel data to a tmp file
+    eval(['save ',voxFileForMrMeshPy,' voxels mmPerVox;']);
+    %run the pyMeshBuild app
+    cmdString = [meshBuildDir,'/launchMeshBuild.sh ',meshBuildDir,'/pyMeshBuild.py ',voxFileForMrMeshPy,' ',mshFileFromMrMeshPy]
+    system(cmdString);
 elseif ispc
-    % Code to run on Windows platform
+    %  Windows 
     disp('Platform not supported')
     barf for now
 else
@@ -112,8 +120,7 @@ else
     return
 end
 
-msh = load('/tmp/temp2.mat');
-
+msh = load(mshFileFromMrMeshPy);
 
 % AG EDIT -TODO
 assignin('base','msh1',msh);

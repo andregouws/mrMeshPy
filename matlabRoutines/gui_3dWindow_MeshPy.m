@@ -29,11 +29,11 @@ function varargout = gui_3dWindow_MeshPy(varargin)
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
-                   'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @gui_3dWindow_MeshPy_OpeningFcn, ...
-                   'gui_OutputFcn',  @gui_3dWindow_MeshPy_OutputFcn, ...
-                   'gui_LayoutFcn',  [] , ...
-                   'gui_Callback',   []);
+    'gui_Singleton',  gui_Singleton, ...
+    'gui_OpeningFcn', @gui_3dWindow_MeshPy_OpeningFcn, ...
+    'gui_OutputFcn',  @gui_3dWindow_MeshPy_OutputFcn, ...
+    'gui_LayoutFcn',  [] , ...
+    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
     gui_State.gui_Callback = str2func(varargin{1});
 end
@@ -68,7 +68,7 @@ guidata(hObject, handles);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = gui_3dWindow_MeshPy_OutputFcn(hObject, eventdata, handles) 
+function varargout = gui_3dWindow_MeshPy_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -80,7 +80,7 @@ varargout{1} = handles.output;
 
 
 %% disabled for now - TODO
-% --- Executes on button press in launch_button. 
+% --- Executes on button press in launch_button.
 function launch_button_Callback(hObject, eventdata, handles)
 
 [myfile,mydir]= uigetfile({'*.mat','MAT-files (*.mat)'});
@@ -90,7 +90,7 @@ myPid = num2str(feature('getpid'));
 if ~isfield(VOLUME{1},'meshNum3d') %% TODO - this willneed to reflect the current volume and x-ref the correct mesh
     meshInstance = '1';
 else
-    meshInstance = num2str(VOLUME{1}.meshNum3d + 1); 
+    meshInstance = num2str(VOLUME{1}.meshNum3d + 1);
 end
 
 evalstr = ['/home/andre/mrMeshPy/launchMeshPy.sh /home/andre/mrMeshPy/meshPy_v03.py ',meshFilePath,' ',myPid,' ',meshInstance,' &'];
@@ -105,12 +105,18 @@ system(evalstr);
 function pushbutton_update_Callback(hObject, eventdata, handles)
 
 mrGlobals;
+set( findall(handles.uipanel1, '-property', 'Enable'), 'Enable', 'off')
 
-currMesh = VOLUME{1}.meshNum3d;
+try
+    currMesh = VOLUME{1}.meshNum3d;
 
-[VOLUME{1},~,~,~,VOLUME{1}.mesh{currMesh}] = meshColorOverlay(VOLUME{1},0);
-mrMeshPySend('updateMeshData',VOLUME{1});
+    [VOLUME{1},~,~,~,VOLUME{1}.mesh{currMesh}] = meshColorOverlay(VOLUME{1},0);
+    mrMeshPySend('updateMeshData',VOLUME{1});
+catch
+    disp 'error in update mesh routine';
+end
 
+set( findall(handles.uipanel1, '-property', 'Enable'), 'Enable', 'On')
 
 
 
@@ -153,7 +159,7 @@ try length(VOLUME{1}.mesh)
         end
         disp 'here1'
         VOLUME{1}.meshNum3d
-        set(handles.popupmenu_Meshes,'value',VOLUME{1}.meshNum3d) ;        
+        set(handles.popupmenu_Meshes,'value',VOLUME{1}.meshNum3d) ;
         set(handles.popupmenu_Meshes,'string',newstring)
         disp 'here2'
     else % no new mesh added
@@ -311,62 +317,70 @@ function pushbutton_buildMesh_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 mrGlobals;
+handles = guidata(hObject)
+set( findall(handles.uipanel1, '-property', 'Enable'), 'Enable', 'off')
 
-% get user option or left or right
-[s,v] = listdlg('PromptString','Select hemisphere:',...
-                    'SelectionMode','single',...
-                    'ListString',{'left','right'});
-
- if s == 1 
-     hemi = 'left';
- elseif s == 2
-     hemi = 'right';
- else
-     disp('error selecting mesh');
-     return
- end
- 
-% build the mesh
-VOLUME{1} = meshBuild_mrMeshPy(VOLUME{1}, hemi);
-
-% ask if we would like to load to mrMeshPy?
-
-% Include the desired Default answer
-options.Interpreter = 'tex';
-options.Default = 'Yes';
-% Use the TeX interpreter in the question
-qstring = 'Would you like to load the mesh to mrMeshPy?';
-loadNow = questdlg(qstring,'Mesh ready .. load?',...
-    'Yes','No',options)
-
-if strcmp(loadNow,'No')
-    return
-else
-    %assume yes
-
-    % create a unique ID for the mesh based on a timestamp (clock)
-    VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID = makeUniqueID;
-            
-    % send the newly loaded mesh to the viewer
-    mrMeshPySend('sendNewMeshData',VOLUME{1}.mesh{VOLUME{1}.meshNum3d});
-
-    handles = guidata(hObject);  % Update!
-    currString = get(handles.popupmenu_Meshes,'string')
-
-    if strcmp(currString,'None')
-        newstring = char(['mesh',num2str(VOLUME{1}.meshNum3d),'-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
+%try
+    % get user option or left or right
+    [s,v] = listdlg('PromptString','Select hemisphere:',...
+        'SelectionMode','single',...
+        'ListString',{'left','right'});
+    
+    if s == 1
+        hemi = 'left';
+    elseif s == 2
+        hemi = 'right';
     else
-        newstring = char(currString,['mesh',num2str(VOLUME{1}.meshNum3d),'-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
+        disp('error selecting mesh');
+        return
     end
     
-    set(handles.popupmenu_Meshes,'value',VOLUME{1}.meshNum3d) ;
-    set(handles.popupmenu_Meshes,'string',newstring);
-end
+    % build the mesh
+    VOLUME{1} = meshBuild_mrMeshPy(VOLUME{1}, hemi);
     
+    % ask if we would like to load to mrMeshPy?
+    
+    % Include the desired Default answer
+    options.Interpreter = 'tex';
+    options.Default = 'Yes';
+    % Use the TeX interpreter in the question
+    qstring = 'Would you like to load the mesh to mrMeshPy?';
+    loadNow = questdlg(qstring,'Mesh ready .. load?',...
+        'Yes','No',options)
+    
+    if strcmp(loadNow,'No')
+        return
+    else
+        %assume yes
+        
+        % create a unique ID for the mesh based on a timestamp (clock)
+        VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID = makeUniqueID;
+        
+        % send the newly loaded mesh to the viewer
+        mrMeshPySend('sendNewMeshData',VOLUME{1}.mesh{VOLUME{1}.meshNum3d});
+        
+        handles = guidata(hObject);  % Update!
+        currString = get(handles.popupmenu_Meshes,'string')
+        
+        if strcmp(currString,'None')
+            newstring = char(['mesh',num2str(VOLUME{1}.meshNum3d),'-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
+        else
+            newstring = char(currString,['mesh',num2str(VOLUME{1}.meshNum3d),'-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
+        end
+        
+        set(handles.popupmenu_Meshes,'value',VOLUME{1}.meshNum3d) ;
+        set(handles.popupmenu_Meshes,'string',newstring);
+    end
+    
+%catch
+%    disp 'error in build mesh routine';
+%end
+
+set( findall(handles.uipanel1, '-property', 'Enable'), 'Enable', 'On')
 
 
-                
-                
-                
-                
-                
+
+
+
+
+

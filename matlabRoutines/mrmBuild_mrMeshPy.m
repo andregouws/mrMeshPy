@@ -30,14 +30,14 @@ unsmoothedMsh = meshFormat(unsmoothedMsh);
 
 msh = unsmoothedMsh;
 
-% Let VTK smooth the mesh
-if smoothFlag,
-    for ii=1:2:nVar
-        msh = meshSet(msh,varargin{ii},str2num(varargin{ii+1}));
-    end
-    msh = meshSmooth(unsmoothedMsh);
-    msh = meshColor(msh);
-end
+% % % % % % Let VTK smooth the mesh
+% % % % % if smoothFlag,
+% % % % %     for ii=1:2:nVar
+% % % % %         msh = meshSet(msh,varargin{ii},str2num(varargin{ii+1}));
+% % % % %     end
+% % % % %     msh = meshSmooth(unsmoothedMsh);
+% % % % %     msh = meshColor(msh);
+% % % % % end
 
 % Return the user the lights
 if visualizeFlag, [msh,lights] = meshVisualize(msh); end
