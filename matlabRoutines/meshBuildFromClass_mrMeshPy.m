@@ -109,7 +109,7 @@ elseif ismac
     % save the voxel data to a tmp file
     eval(['save ',voxFileForMrMeshPy,' voxels mmPerVox;']);
     %run the pyMeshBuild app
-    cmdString = [meshBuildDir,'/launchMeshBuild.sh ',meshBuildDir,'/pyMeshBuild.py ',voxFileForMrMeshPy,' ',mshFileFromMrMeshPy]
+    cmdString = [meshBuildDir,'/launchMeshBuild.sh ',meshBuildDir,'/pyMeshBuild_mac.py ',voxFileForMrMeshPy,' ',mshFileFromMrMeshPy] %TODO set python path?
     system(cmdString);
 elseif ispc
     %  Windows 

@@ -1,4 +1,6 @@
-#!/usr/bin/python
+#!/Users/lcladm/anaconda2/bin/python
+
+# TODO - python path - assuming condo here 
 
 ## HEALTH WARNING - BETA CODE IN DEVELOPMENT ##
 
