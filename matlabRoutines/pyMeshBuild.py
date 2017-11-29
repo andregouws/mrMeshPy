@@ -1,4 +1,4 @@
-#!/Users/lcladm/anaconda2/bin/python
+#!/usr/bin/python
 
 # TODO - python path - assuming condo here 
 
