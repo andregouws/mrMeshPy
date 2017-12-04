@@ -153,9 +153,9 @@ try length(VOLUME{1}.mesh)
         currString = get(handles.popupmenu_Meshes,'string')
         
         if strcmp(currString,'None')
-            newstring = char(['mesh',num2str(VOLUME{1}.meshNum3d),'-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
+            newstring = char(['mesh-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
         else
-            newstring = char(currString,['mesh',num2str(VOLUME{1}.meshNum3d),'-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
+            newstring = char(currString,['mesh-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
         end
         disp 'here1'
         VOLUME{1}.meshNum3d
@@ -363,9 +363,9 @@ set( findall(handles.uipanel1, '-property', 'Enable'), 'Enable', 'off')
         currString = get(handles.popupmenu_Meshes,'string')
         
         if strcmp(currString,'None')
-            newstring = char(['mesh',num2str(VOLUME{1}.meshNum3d),'-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
+            newstring = char(['mesh-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
         else
-            newstring = char(currString,['mesh',num2str(VOLUME{1}.meshNum3d),'-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
+            newstring = char(currString,['mesh-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
         end
         
         set(handles.popupmenu_Meshes,'value',VOLUME{1}.meshNum3d) ;

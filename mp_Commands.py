@@ -70,7 +70,7 @@ def run_mp_command(commandName, commandArgs, theMeshInstance, mainWindowUI, the_
         mainWindowUI.vtkDict[theMeshInstance] = newIndex
         
         # add a new tab with a new wVTK window
-        mrMeshVTKWindow(mainWindowUI, 'None')
+        mrMeshVTKWindow(mainWindowUI, theMeshInstance, 'None')
 
         mainWindowUI.tabWidget.setCurrentIndex(newIndex) #zero indexed 
         mainWindowUI.tabWidget.update()
@@ -87,17 +87,25 @@ def run_mp_command(commandName, commandArgs, theMeshInstance, mainWindowUI, the_
     elif commandName == 'smoothMesh':
         mainWindowUI.statusbar.showMessage(' ... attempting to smooth mesh with id %s ...' %(theMeshInstance))
         #load data and generate the mesh
-        smoothMesh(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver)
-        mainWindowUI.statusbar.showMessage(' ... Finished smoothing mesh with id %s ...' %(theMeshInstance))
-        the_TCPserver.socket.write(str('send useful message back here TODO'))
+        err = smoothMesh(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver)
+        if err == 0:        
+            mainWindowUI.statusbar.showMessage(' ... Finished smoothing mesh with id %s ...' %(theMeshInstance))
+            the_TCPserver.socket.write(str('Mesh smooth complete'))
+        else:
+            mainWindowUI.statusbar.showMessage(' ... Error trying to smooth mesh with id %s ...' %(theMeshInstance))
+            the_TCPserver.socket.write(str('Mesh smooth failed'))            
 
 
     elif commandName == 'updateMeshData':
         mainWindowUI.statusbar.showMessage(' ... updating mesh with id %s with current View settings ...' %(theMeshInstance))
         #load data and send to the mesh
-        updateMeshData(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver)
-        mainWindowUI.statusbar.showMessage(' ... Finished: updated data for mesh id %s ...' %(theMeshInstance))
-        the_TCPserver.socket.write(str('send useful message back here TODO'))
+        err = updateMeshData(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver)
+        if err == 0:       
+            mainWindowUI.statusbar.showMessage(' ... Finished: updated data for mesh id %s ...' %(theMeshInstance))
+            the_TCPserver.socket.write(str('Mesh update complete'))
+        else:
+            mainWindowUI.statusbar.showMessage(' ... Error trying to update mesh with id %s ...' %(theMeshInstance))
+            the_TCPserver.socket.write(str('Mesh update failed'))  
 
 
     elif commandName == 'checkMeshROI':

@@ -17,7 +17,7 @@ debug = False
 
 
 # add a new VTK window as an extra tab in the Main window's tab widget
-def mrMeshVTKWindow(parentUI, data):
+def mrMeshVTKWindow(parentUI, theMeshInstance, data):
     _translate = QtCore.QCoreApplication.translate
     
     #create a new vtkWidget, appending to the list of exisitng widgets
@@ -43,7 +43,7 @@ def mrMeshVTKWindow(parentUI, data):
     parentUI.gridLayoutTabNew.addLayout(parentUI.gridLayoutVTKWinNew, 0, 0, 1, 1)
     
     parentUI.gridLayoutVTKWinNew.addWidget(newVTKWidgetInstance, 0, 0, 1, 1)
-    parentUI.tabWidget.addTab(parentUI.newTab, "Mesh %s" %currMeshCount)
+    parentUI.tabWidget.addTab(parentUI.newTab, "Mesh-%s" %theMeshInstance)
 
     # have to set the resize policy now
     sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.MinimumExpanding)

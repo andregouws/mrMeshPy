@@ -225,11 +225,13 @@ def loadNewMesh(currVTKInstance, commandArgs, mainWindowUI, the_TCPserver):
 
 def smoothMesh(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
     
-    #lets get the apt window 
-    ### targetVTKWindow = mainWindowUI.vtkInstances[int(theMeshInstance)] 
-
-    # unique string should return index to correct window / tab
-    targetVTKWindow = mainWindowUI.vtkInstances[mainWindowUI.vtkDict[theMeshInstance]] 
+    #lets try to get the apt window
+    try:
+        targetVTKWindow = mainWindowUI.vtkInstances[mainWindowUI.vtkDict[theMeshInstance]] 
+    except:
+        print ('No mesh instance with id:%s currently available - may need a re-synch' %theMeshInstance)
+        #return error
+        return 1
 
     # lets show the correct tab
     mainWindowUI.tabWidget.setCurrentIndex(int(mainWindowUI.vtkDict[theMeshInstance])) 
@@ -272,6 +274,9 @@ def smoothMesh(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
     updateMeshData(theMeshInstance, [], mainWindowUI, the_TCPserver)
     if debug: print  'update completed'    
 
+    #return success
+    return 0
+
 
 def updateMeshData(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
     
@@ -279,8 +284,14 @@ def updateMeshData(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
     # current View settings in from the vista session WITH THE COLOR VALUES FROM
     # VISTA - i.e. do not go through a lookuptable
     
-    #lets get the apt window 
-    targetVTKWindow = mainWindowUI.vtkInstances[mainWindowUI.vtkDict[theMeshInstance]] 
+    #lets try to get the apt window
+    try:
+        targetVTKWindow = mainWindowUI.vtkInstances[mainWindowUI.vtkDict[theMeshInstance]] 
+    except:
+        print ('No mesh instance with id:%s currently available - may need a re-synch' %theMeshInstance)
+        #return error
+        return 1
+        
 
     # lets show the correct tab
     mainWindowUI.tabWidget.setCurrentIndex(int(mainWindowUI.vtkDict[theMeshInstance])) #zero index
@@ -365,6 +376,9 @@ def updateMeshData(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
     targetVTKWindow.ren.Render()
     targetVTKWindow.Render()
     print('success with direct mesh update routine')
+
+    #return success
+    return 0
 
 
 
