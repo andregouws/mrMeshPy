@@ -97,20 +97,22 @@ mshFileFromMrMeshPy = [tempname,'.mat'];
 
 
 %run the pyMeshBuild.py program to generate the meshes
-if isunix
-    % Linux
-    % save the voxel data to a tmp file
-    eval(['save ',voxFileForMrMeshPy,' voxels mmPerVox;']);
-    %run the pyMeshBuild app
-    cmdString = [meshBuildDir,'/launchMeshBuild.sh ',meshBuildDir,'/pyMeshBuild.py ',voxFileForMrMeshPy,' ',mshFileFromMrMeshPy]
-    system(cmdString);
-elseif ismac
+if ismac
     % Mac - same as linux? #TODO
     % save the voxel data to a tmp file
     eval(['save ',voxFileForMrMeshPy,' voxels mmPerVox;']);
     %run the pyMeshBuild app
     cmdString = [meshBuildDir,'/launchMeshBuild.sh ',meshBuildDir,'/pyMeshBuild_mac.py ',voxFileForMrMeshPy,' ',mshFileFromMrMeshPy] %TODO set python path?
     system(cmdString);
+    
+elseif isunix
+    % Linux
+    % save the voxel data to a tmp file
+    eval(['save ',voxFileForMrMeshPy,' voxels mmPerVox;']);
+    %run the pyMeshBuild app
+    cmdString = [meshBuildDir,'/launchMeshBuild.sh ',meshBuildDir,'/pyMeshBuild.py ',voxFileForMrMeshPy,' ',mshFileFromMrMeshPy]
+    system(cmdString);
+
 elseif ispc
     %  Windows 
     disp('Platform not supported')
