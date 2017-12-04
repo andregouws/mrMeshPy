@@ -31,4 +31,5 @@ elseif strcmp(char(mesh_reply), 'Mesh update failed')
     end
 else
     disp('No handler for this reply yet.. continuing.');
+    replyAction = 0;
 end
