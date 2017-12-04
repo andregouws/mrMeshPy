@@ -359,7 +359,7 @@ set( findall(handles.uipanel1, '-property', 'Enable'), 'Enable', 'off')
         VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID = makeUniqueID;
         
         % send the newly loaded mesh to the viewer
-        mrMeshPySend('sendNewMeshData',VOLUME{1}.mesh{VOLUME{1}.meshNum3d});
+        mrMeshPySend('sendNewMeshData',VOLUME{1});
         
         handles = guidata(hObject);  % Update!
         currString = get(handles.popupmenu_Meshes,'string')

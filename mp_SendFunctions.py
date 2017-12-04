@@ -42,6 +42,7 @@ def sendROIVertices(theMeshInstance, commandArgs, mainWindowUI, the_TCPserver):
 
     formatData = array(data_to_send,'d')
     formatString = formatData.tostring()
+    if debug: print(formatData)    
     if debug: print(formatString)
     if debug: print(len(formatString))
     the_TCPserver.socket.write(formatString)

@@ -280,7 +280,7 @@ elseif strcmp(the_command, 'checkMeshROI') == 1
     % unpack the
     if strcmp(char(mesh_reply(1:8)),'RoiReady')
         replyStr = char(mesh_reply);
-        replyArgs = strsplit(mesh_reply,',')
+        replyArgs = strsplit(replyStr,',')
     else
         disp('Error: No ROI data received? ...')
         return
@@ -313,21 +313,21 @@ elseif strcmp(the_command, 'checkMeshROI') == 1
     % in the following transactions
     write(t,uint8([TCPCommand]));
     
-    % wait til the server returns something before moving on
-    mesh_reply = read(t);
-    while isempty(mesh_reply)
-        mesh_reply = read(t);
+ 
+    reply = read(t, expectedBytes)
+    while isempty(reply)
+        reply = read(t, expectedBytes);
         disp 'waiting'
         pause(0.1);
     end
-    
-    disp(char(mesh_reply));
     
     %debug
     assignin('base','reply',reply);
     
     vertices = typecast(uint8(reply), 'double');
     vertices = uint32(vertices) + 1;
+    
+    
     
     %% TODO layer 1 only code?
 % % %     verts = adjustPerimeter(vertices, [], currView)';
@@ -342,7 +342,7 @@ elseif strcmp(the_command, 'checkMeshROI') == 1
     
     
     %% currently support "all layers" mode only
-    verts    = adjustPerimeter(vertices, [], currView)';
+    verts = adjustPerimeter(vertices, [], currView)';
     
     msh = currView.mesh{currMesh}    
     grayInds = msh.vertexGrayMap(1,verts);
