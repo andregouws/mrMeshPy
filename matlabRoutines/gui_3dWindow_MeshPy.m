@@ -146,8 +146,8 @@ try length(VOLUME{1}.mesh)
         % create a unique ID for the mesh based on a timestamp (clock)
         VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID = makeUniqueID;
         
-        % send the newly loaded mesh to the viewer
-        mrMeshPySend('sendNewMeshData',VOLUME{1}.mesh{VOLUME{1}.meshNum3d});
+        % send the newly loaded mesh to the viewer via the VOLUME
+        mrMeshPySend('sendNewMeshData',VOLUME{1});
         
         handles = guidata(hObject);  % Update!
         currString = get(handles.popupmenu_Meshes,'string')
@@ -157,11 +157,11 @@ try length(VOLUME{1}.mesh)
         else
             newstring = char(currString,['mesh-',VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID]);
         end
-        disp 'here1'
-        VOLUME{1}.meshNum3d
+        %disp 'here1'
+        %VOLUME{1}.meshNum3d
         set(handles.popupmenu_Meshes,'value',VOLUME{1}.meshNum3d) ;
-        set(handles.popupmenu_Meshes,'string',newstring)
-        disp 'here2'
+        set(handles.popupmenu_Meshes,'string',newstring);
+        %disp 'here2'
     else % no new mesh added
         disp('User cancelled mesh load or there was an error loading ...');
     end
@@ -233,13 +233,15 @@ iterations = get(handles.edit_iterations,'String')
 relax = str2num(relax);
 iterations = str2num(iterations);
 
-assignin('base','iterations',iterations);
-assignin('base','relax',relax);
+%assignin('base','iterations',iterations);
+%assignin('base','relax',relax);
 
 currMeshID = VOLUME{1}.mesh{VOLUME{1}.meshNum3d}.mrMeshPyID;
 
-disp('here1')
-mrMeshPySend('smoothMesh',{currMeshID,iterations,relax});
+%disp('here1')
+
+% send (with VOLUME also)
+mrMeshPySend('smoothMesh',{currMeshID,iterations,relax,VOLUME{1}});
 
 
 function edit_relaxationFactor_Callback(hObject, eventdata, handles)

@@ -36,7 +36,9 @@ function myOutput = mrMeshPySend(the_command, the_data)
 %% new mesh
 if strcmp(the_command, 'sendNewMeshData') == 1
     
-    msh = the_data; % expects a mesh (msh) structure
+    % get the target mesh from the VOLUME
+    VOLUME{1} = the_data(1);
+    msh = VOLUME{1}.mesh{VOLUME{1}.meshNum3d}; % expects a mesh (msh) structure
     
     % send the new vertices as a vector ([x1 y1 z1 x2 y2 z2 ..... xn yn zn])
     verticesVector = reshape(msh.vertices,1,size(msh.vertices,1)*size(msh.vertices,2));
@@ -104,24 +106,27 @@ if strcmp(the_command, 'sendNewMeshData') == 1
     write(t,currColors(3,:));
     write(t,currColors(4,:));
     
-    y = read(t);
-    while isempty(y)
-        y = read(t);
+    mesh_reply = read(t);
+    while isempty(mesh_reply)
+        mesh_reply = read(t);
         disp 'waiting'
         pause(0.1);
     end
-    read(t);
+    
+    disp(char(mesh_reply));
 
 
 %% smooth existing mesh    
 elseif strcmp(the_command, 'smoothMesh') == 1
     %simple smoothing routine
     
-    the_data
+    %the_data
     
     targetMesh = the_data{1};
     iterations = the_data{2};
     relaxationfactor = the_data{3};
+    
+    VOLUME{1} = the_data{4}; %place in scope in case we need a re-synch
     
     theCommandStruct = struct('cmdIdentifier','cmd'); %always start a command with this
     theCommandStruct.CommandToSend = 'smoothMesh'; % a command listed in mrMeshPyCommandsList.m
@@ -142,14 +147,20 @@ elseif strcmp(the_command, 'smoothMesh') == 1
     
     % done! - no extra data blob to send here!
     
-    y = read(t);
-    while isempty(y)
-        y = read(t);
+    mesh_reply = read(t);
+    while isempty(mesh_reply)
+        mesh_reply = read(t);
         disp 'waiting'
         pause(0.1);
     end
-    read(t);
     
+    disp(char(mesh_reply));
+
+    actionToTake = mrMeshReplyHandler(mesh_reply, targetMesh);
+    
+    if actionToTake == 101 %reload required
+        mrMeshPySend('sendNewMeshData',VOLUME{1});
+    end
     
     %% TODO - auto-remap the colour data?
     % we do however need to make sure we re-map the correct colors to their
@@ -214,13 +225,19 @@ elseif strcmp(the_command, 'updateMeshData') == 1
     write(t,newColors(3,:));
     write(t,newColors(4,:));
     
-    y = read(t);
-    while isempty(y)
-        y = read(t);
+    mesh_reply = read(t);
+    while isempty(mesh_reply)
+        mesh_reply = read(t);
         disp 'waiting'
         pause(0.1);
     end
-   
+    
+    actionToTake = mrMeshReplyHandler(mesh_reply, currView.mesh{currMesh}.mrMeshPyID);
+    
+    if actionToTake == 101 %reload required
+        mrMeshPySend('sendNewMeshData',currView);
+    end
+
     
 %% get an roi drawn on the mesh back into matlab
 elseif strcmp(the_command, 'checkMeshROI') == 1
@@ -245,22 +262,25 @@ elseif strcmp(the_command, 'checkMeshROI') == 1
     write(t,uint8([initialTCPCommand]));
     
     % wait til the server returns something before moving on
-    reply = read(t);
-    while isempty(reply)
-        reply = read(t);
+    mesh_reply = read(t);
+    while isempty(mesh_reply)
+        mesh_reply = read(t);
         disp 'waiting'
         pause(0.1);
     end
     
+    disp(char(mesh_reply));
+
+    
     % TODO add timeout?
     
-    disp(['Got response - ', reply]);
-    assignin('base','reply',reply);
+    disp(['Got response - ', mesh_reply]);
+    assignin('base','reply',mesh_reply);
     
     % unpack the
-    if strcmp(char(reply(1:8)),'RoiReady')
-        replyStr = char(reply);
-        replyArgs = strsplit(replyStr,',')
+    if strcmp(char(mesh_reply(1:8)),'RoiReady')
+        replyStr = char(mesh_reply);
+        replyArgs = strsplit(mesh_reply,',')
     else
         disp('Error: No ROI data received? ...')
         return
@@ -294,12 +314,14 @@ elseif strcmp(the_command, 'checkMeshROI') == 1
     write(t,uint8([TCPCommand]));
     
     % wait til the server returns something before moving on
-    reply = read(t, expectedBytes)
-    while isempty(reply)
-        reply = read(t, expectedBytes);
+    mesh_reply = read(t);
+    while isempty(mesh_reply)
+        mesh_reply = read(t);
         disp 'waiting'
         pause(0.1);
     end
+    
+    disp(char(mesh_reply));
     
     %debug
     assignin('base','reply',reply);
