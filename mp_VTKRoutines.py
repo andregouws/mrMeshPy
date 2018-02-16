@@ -173,7 +173,23 @@ def loadNewMesh(currVTKInstance, commandArgs, mainWindowUI, the_TCPserver):
 
     ren = mainWindowUI.vtkInstances[-1].ren
     mainWindowUI.vtkInstances[-1]._Iren.ren = ren
-     
+
+    # ADD A LIGHT SOURCE TODO: MAKE THIS OPTIONAL/DEFAULT?
+    lightKit = vtk.vtkLightKit()
+    # TODO: SOME OPTIONS TO EXPLORE
+    #lightKit.MaintainLuminanceOn()
+    #lightKit.SetKeyLightIntensity(1.0)
+    ## warmth of the lights
+    #lightKit.SetKeyLightWarmth(0.65)
+    #lightKit.SetFillLightWarmth(0.6)
+    #lightKit.SetHeadLightWarmth(0.45)
+    ## intensity ratios
+    ## back lights will be very dimm
+    #lightKit.SetKeyToFillRatio(2.)
+    #lightKit.SetKeyToHeadRatio(7.)
+    lightKit.SetKeyToBackRatio(10.)
+    lightKit.AddLightsToRenderer(ren)
+   
     ren.AddActor(actor)
     ren.SetBackground(1,1,1)
     ren.ResetCamera()
