@@ -32,6 +32,8 @@ def Ui_setupMenuBarCallbacks(parent_UI):
     parent_UI.actionCloseAndFill.triggered.connect(cb_MenuCloseAndFill)
     parent_UI.actionStart_New_ROI.triggered.connect(startNewROI)
     parent_UI.actionSend_10_bytes_TCP.triggered.connect(send10Bytes)
+    parent_UI.actionExport_Surface_to_stl.triggered.connect(cb_ExportToSTL)
+
 
 
 def testMenuMessage():
@@ -61,6 +63,24 @@ def cb_MenuEnableDraw():
     except:
         pass
         
+
+def cb_ExportToSTL():
+    global the_parent_UI
+    # export the current surface to stl file format
+    # get the current viewed instance
+    currentIndex = the_parent_UI.tabWidget.currentIndex()
+
+    # extract the polydata from the surface as it is currently rendered for export
+    # get the actor    
+    act = the_parent_UI.vtkInstances[currentIndex].curr_actor
+    polydata = act.GetMapper().GetInput()
+    polydata.Modified()
+
+    # open an stl exporter
+    stl = vtk.vtkSTLWriter()
+    stl.SetInputData(polydata)
+    stl.SetFileName("/tmp/brain.stl")
+    stl.Write()
 
 def cb_MenuDisableDraw():
     global the_parent_UI

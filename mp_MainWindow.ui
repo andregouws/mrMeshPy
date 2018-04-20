@@ -96,11 +96,18 @@
     </property>
     <addaction name="actionSend_10_bytes_TCP"/>
    </widget>
+   <widget class="QMenu" name="menuExport">
+    <property name="title">
+     <string>Export</string>
+    </property>
+    <addaction name="actionExport_Surface_to_stl"/>
+   </widget>
    <addaction name="menuMenu"/>
    <addaction name="menuComing"/>
    <addaction name="menuSoon"/>
    <addaction name="menuROIs"/>
    <addaction name="menuTesting"/>
+   <addaction name="menuExport"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSoon">
@@ -131,6 +138,11 @@
   <action name="actionStart_New_ROI">
    <property name="text">
     <string>Start New ROI</string>
+   </property>
+  </action>
+  <action name="actionExport_Surface_to_stl">
+   <property name="text">
+    <string>Export Surface to .stl</string>
    </property>
   </action>
  </widget>

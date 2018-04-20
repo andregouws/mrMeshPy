@@ -176,6 +176,7 @@ def loadNewMesh(currVTKInstance, commandArgs, mainWindowUI, the_TCPserver):
 
     # ADD A LIGHT SOURCE TODO: MAKE THIS OPTIONAL/DEFAULT?
     lightKit = vtk.vtkLightKit()
+    lightKit.SetKeyLightIntensity(0.5)
     # TODO: SOME OPTIONS TO EXPLORE
     #lightKit.MaintainLuminanceOn()
     #lightKit.SetKeyLightIntensity(1.0)
@@ -185,9 +186,9 @@ def loadNewMesh(currVTKInstance, commandArgs, mainWindowUI, the_TCPserver):
     #lightKit.SetHeadLightWarmth(0.45)
     ## intensity ratios
     ## back lights will be very dimm
-    #lightKit.SetKeyToFillRatio(2.)
-    #lightKit.SetKeyToHeadRatio(7.)
-    lightKit.SetKeyToBackRatio(10.)
+    lightKit.SetKeyToFillRatio(1.)
+    lightKit.SetKeyToHeadRatio(2.)
+    lightKit.SetKeyToBackRatio(1.)
     lightKit.AddLightsToRenderer(ren)
    
     ren.AddActor(actor)
