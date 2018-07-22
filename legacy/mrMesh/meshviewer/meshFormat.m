@@ -33,6 +33,7 @@ for ii=1:length(fields)
             % example, a null actor field generated an error on line 60.
             % This additional isempty check fixed things. ARW 052407
             newMsh = meshSet( newMsh, fields{ii}, meshGet(oldMsh, fields{ii}) );
+            
         end
         
     end

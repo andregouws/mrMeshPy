@@ -138,4 +138,7 @@ msh = meshSet(msh,'origin',-mean(vertices,2)');
 msh = meshSet(msh,'mmPerVox',mmPerVox);
 fprintf('[%s]: done. \n', mfilename);
 
+
+assignin('base','msh3',msh);
+
 return;

@@ -339,7 +339,7 @@ set( findall(handles.uipanel1, '-property', 'Enable'), 'Enable', 'off')
     
     % build the mesh
     VOLUME{1} = meshBuild_mrMeshPy(VOLUME{1}, hemi);
-    
+        
     % ask if we would like to load to mrMeshPy?
     
     % Include the desired Default answer

@@ -51,13 +51,14 @@
     </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>708</width>
-     <height>19</height>
+     <height>24</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -67,17 +68,7 @@
     <property name="title">
      <string>Menu</string>
     </property>
-   </widget>
-   <widget class="QMenu" name="menuComing">
-    <property name="title">
-     <string>Coming</string>
-    </property>
-    <addaction name="actionSoon"/>
-   </widget>
-   <widget class="QMenu" name="menuSoon">
-    <property name="title">
-     <string>Soon</string>
-    </property>
+    <addaction name="actionUnder_development"/>
    </widget>
    <widget class="QMenu" name="menuROIs">
     <property name="title">
@@ -103,13 +94,10 @@
     <addaction name="actionExport_Surface_to_stl"/>
    </widget>
    <addaction name="menuMenu"/>
-   <addaction name="menuComing"/>
-   <addaction name="menuSoon"/>
    <addaction name="menuROIs"/>
    <addaction name="menuTesting"/>
    <addaction name="menuExport"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSoon">
    <property name="text">
     <string>Soon</string>
@@ -143,6 +131,11 @@
   <action name="actionExport_Surface_to_stl">
    <property name="text">
     <string>Export Surface to .stl</string>
+   </property>
+  </action>
+  <action name="actionUnder_development">
+   <property name="text">
+    <string>Under development</string>
    </property>
   </action>
  </widget>

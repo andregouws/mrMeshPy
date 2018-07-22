@@ -148,7 +148,9 @@ if(mapToAllLayers && exist('grayEdges','var') && ~isempty(grayEdges))
     noNeighbor2 = 0;
     
     v2gMapTemp = zeros(numLayers,size(grayNodes,2));
-    
+
+    assignin('base','v2gMapTemp',v2gMapTemp);
+
     h = mrvWaitbar(0, 'Computing between layers connections...');
     progress = 0;
     for iLayer = numLayers:-1:curLayerNum
@@ -226,6 +228,13 @@ if(mapToAllLayers && exist('grayEdges','var') && ~isempty(grayEdges))
     
     h = mrvWaitbar(1/2, h, 'Creating connections table...');
     progress = 0;
+    
+    size(v2gMap)
+    size(grayNodes,2)
+    
+    assignin('base','grayNodes',grayNodes)
+    
+    
     for iNode = 1:size(grayNodes,2)
         if iNode > (progress + 1/10)*size(grayNodes,2)
             progress = progress + 1/10;
@@ -250,11 +259,19 @@ if(mapToAllLayers && exist('grayEdges','var') && ~isempty(grayEdges))
         end
         
         v2gMap(indices(indexNode),indexNode) = iNode;
+        
         indices(indexNode) = indices(indexNode) + 1;
         
     end
+    
+    size(v2gMap)
+
+    
     close(h);
  
 end
+
+assignin('base','v2gMap1',v2gMap);
+
 
 return;
